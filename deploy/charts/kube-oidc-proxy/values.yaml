@@ -19,7 +19,9 @@ service:
   annotations:
     # You can use this field to add annotations to the Service.
     # Define it in a key-value pairs. E.g.
-    # service.beta.kubernetes.io/aws-load-balancer-internal: true
+    # service.beta.kubernetes.io/aws-load-balancer-internal: "true" ## AWS
+    # service.beta.kubernetes.io/azure-load-balancer-internal: "true" ## Azure
+    # cloud.google.com/load-balancer-type: "Internal" ## GCP
 
   loadBalancerIP: ""
   loadBalancerSourceRanges: []
@@ -28,6 +30,8 @@ tls:
   # `secretName` must be a name of Secret of TLS type. If not provided a
   # self-signed certificate will get generated.
   secretName:
+  # `hostName` is the domain name that will be optionally added to the self-signed certificate.
+  hostName:
 
 # These values needs to be set in overrides in order to get kube-oidc-proxy
 # working.
