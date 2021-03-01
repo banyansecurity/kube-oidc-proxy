@@ -40,14 +40,14 @@ oidc:
   # values.
   clientId: ""
   issuerUrl: ""
-  usernameClaim: "email"
+  usernameClaim: email
 
   # PEM encoded value of CA cert that will verify TLS connection to
   # OIDC issuer URL. If not provided, default hosts root CA's will be used.
   caPEM:
 
   usernamePrefix: "banyan:"
-  groupsClaim: "roles"
+  groupsClaim: roles
   groupsPrefix: "banyan:"
 
   signingAlgs:
