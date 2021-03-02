@@ -14,7 +14,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 443
   annotations:
     # You can use this field to add annotations to the Service.
@@ -40,15 +40,15 @@ oidc:
   # values.
   clientId: ""
   issuerUrl: ""
-  usernameClaim: ""
+  usernameClaim: email
 
   # PEM encoded value of CA cert that will verify TLS connection to
   # OIDC issuer URL. If not provided, default hosts root CA's will be used.
   caPEM:
 
-  usernamePrefix:
-  groupsClaim:
-  groupsPrefix:
+  usernamePrefix: "banyan:"
+  groupsClaim: roles
+  groupsPrefix: "banyan:"
 
   signingAlgs:
     - RS256
