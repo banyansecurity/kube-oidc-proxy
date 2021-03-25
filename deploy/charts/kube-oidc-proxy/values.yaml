@@ -9,6 +9,19 @@ image:
   tag: v0.3.0
   pullPolicy: IfNotPresent
 
+auditProxyImage:
+  name: bnn-audit-proxy
+  repository: gcr.io/banyan-pub/k8s-audit-proxy
+  tag: v0.0.5
+  pullPolicy: IfNotPresent
+
+auditProxy:
+  # required
+  serviceName:
+  # required
+  refreshToken:
+  restapiUrl: "https://net.banyanops.com"
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -29,9 +42,7 @@ service:
 tls:
   # `secretName` must be a name of Secret of TLS type. If not provided a
   # self-signed certificate will get generated.
-  secretName:
-  # `hostName` is the domain name that will be optionally added to the self-signed certificate.
-  hostName:
+  secretName: selfsigned-kube-oidc-proxy-cert-tls
 
 # These values needs to be set in overrides in order to get kube-oidc-proxy
 # working.
@@ -66,20 +77,27 @@ extraImpersonationHeaders:
   clientIP: false
   #headers: key1=foo,key2=bar,key1=bar
 
-extraArgs: {}
-  #audit-log-path: /audit-log
-  #audit-policy-file: /audit/audit.yaml
+extraArgs:
+  audit-webhook-config-file: /audit/webhook.yaml
+  audit-policy-file: /audit/audit.yaml
+  audit-webhook-batch-max-wait: 300s #5 mins
+  audit-webhook-initial-backoff: 30s
+  audit-webhook-batch-max-size: 400
+  audit-webhook-batch-throttle-burst: 4
+  audit-webhook-batch-throttle-qps: .067 # every 15seconds
+  audit-webhook-batch-buffer-size: 10000
+  audit-webhook-truncate-enabled: true
 
-extraVolumeMounts: {}
-  #- name: audit
-  #  mountPath: /audit
-  #  readOnly: true
+extraVolumeMounts:
+  - name: audit
+    mountPath: /audit
+    readOnly: true
 
-extraVolumes: {}
-  #- configMap:
-      #defaultMode: 420
-      #name: kube-oidc-proxy-policy
-    #name: audit
+extraVolumes:
+  - configMap:
+      defaultMode: 420
+      name: kube-oidc-proxy-audit-policy
+    name: audit
 
 ingress:
   enabled: false
